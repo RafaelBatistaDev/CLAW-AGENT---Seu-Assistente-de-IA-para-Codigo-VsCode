@@ -4,11 +4,11 @@
   "description": "Agente profissional de IA para análise, refatoração, documentação e testes automáticos. Auto-detecta e usa qualquer IA: Gemini, OpenAI, Claude, LocalAI, Ollama",
   "version": "1.1.0",
   "icon": "icon.png",
-  "publisher": "ClawAgent",
+  "publisher": "RafaelBatista",
   "author": {
-    "name": "CLAW Agent Team",
-    "email": "info@claw-agent.dev",
-    "url": "https://github.com/claw-agent"
+    "name": "Rafael Batista",
+    "email": "rafaelbatistadev@outlook.com.br",
+    "url": "https://github.com/RafaelBatistaDev"
   },
   "license": "MIT",
   "repository": {
