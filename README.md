@@ -1,11 +1,11 @@
-# 🤖 CLAW AGENT v1.0.2
+# 🤖 CLAW AGENT
 
 **Agente profissional de IA para análise, refatoração, documentação e testes automáticos**
 
 > Versão focada: 6 comandos principais. Sem complexidade desnecessária. Puro profissionalismo.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Version: 1.0.2](https://img.shields.io/badge/Version-1.0.2-blue.svg)](.)
+[![Version: 1.0.3](https://img.shields.io/badge/Version-1.0.3-blue.svg)](.)
 [![Status: Production Ready](https://img.shields.io/badge/Status-Production%20Ready-brightgreen.svg)](.)
 
 ---

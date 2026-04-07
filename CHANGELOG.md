@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.0.3] - 2026-04-07
+
+### 🔧 Correções
+
+- ✅ displayName: removido versão do nome (apenas "🤖 CLAW AGENT")
+- ✅ Versão agora fica somente em package.json, package.json
+- ✅ README atualizado com versão 1.0.3
+
+---
+
 ## [1.0.2] - 2026-04-07
 
 ### 🎯 Versão Focada - Release Profissional
