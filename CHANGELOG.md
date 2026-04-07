@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.1.1] - 2026-04-07
+
+### 📝 Atualização de Versão e Branding
+
+**NOVO:**
+- ✨ displayName atualizado: CLAW AGENT - Seu Assistente de IA para Código
+- ✨ Versão oficial: 1.1.1
+- ✨ Documentação completa verificada e atualizada
+
+---
+
 ## [1.0.3] - 2026-04-07
 
 ### 🔧 Correções
