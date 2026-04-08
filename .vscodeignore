@@ -1,0 +1,57 @@
+# Ferramentas de Build
+build.sh
+build.bat
+compile.sh
+webpack.config.js
+tsconfig.json
+
+# Dependências do npm (exceto node_modules compilados)
+node_modules/**
+
+# Documentação de Compilação (não necessária no VSIX)
+BUILD_GUIDE.md
+COMPILAR_AGORA.md
+COMPILAR_E_PUBLICAR.md
+GERAR_VSIX_AGORA.md
+CHECKLIST_COMPILACAO.md
+RELATÓRIO_FINAL.md
+RESUMO_EXECUTIVO.md
+VERIFICACAO_FINAL.txt
+
+# Código Fonte TypeScript (não necessário, já compilado em dist/)
+src/**
+
+# Git e Controle de Versão
+.git/**
+.gitignore
+.gitattributes
+
+# Desenvolvimento VS Code
+.vscode/**
+.eslintrc.json
+
+# Testes
+test/**
+tests/**
+*.test.ts
+*.spec.ts
+
+# Documentação interna
+docs/**
+
+# Arquivos temporários e cache
+*.tmp
+*.log
+*.sass-cache
+dist/**/*.map
+
+# Arquivos de configuração npm
+package-lock.json
+
+# Outros
+.DS_Store
+.env
+.env.local
+**/*.swp
+**/*.swo
+*~

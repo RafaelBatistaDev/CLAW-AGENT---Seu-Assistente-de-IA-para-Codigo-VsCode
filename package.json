@@ -1,0 +1,123 @@
+{
+  "name": "claw-agent",
+  "displayName": "CLAW AGENT - Seu Assistente de IA para Código",
+  "description": "Agente profissional de IA. Analisa, refatora, documenta e testa código. Suporta: analyze, improve, document, test, ask, status",
+  "version": "1.1.2",
+  "icon": "icon.png",
+  "publisher": "RafaelBatista",
+  "author": {
+    "name": "Rafael Batista",
+    "email": "rafaelbatistadev@outlook.com.br",
+    "url": "https://github.com/RafaelBatistaDev"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/RafaelBatistaDev/CLAW-AGENT---Seu-Assistente-de-IA-para-Codigo-VsCode"
+  },
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Other"
+  ],
+  "keywords": [
+    "ai-agent",
+    "code-analysis",
+    "refactoring",
+    "documentation",
+    "testing",
+    "gemini",
+    "openai",
+    "claude"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "clawagent.analyze",
+        "title": "🔍 CLAW Agent: Analisar Código"
+      },
+      {
+        "command": "clawagent.improve",
+        "title": "✨ CLAW Agent: Melhorar Código"
+      },
+      {
+        "command": "clawagent.document",
+        "title": "📚 CLAW Agent: Gerar Documentação"
+      },
+      {
+        "command": "clawagent.test",
+        "title": "🧪 CLAW Agent: Criar Testes"
+      },
+      {
+        "command": "clawagent.ask",
+        "title": "❓ CLAW Agent: Fazer Pergunta"
+      },
+      {
+        "command": "clawagent.status",
+        "title": "ℹ️ CLAW Agent: Status"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "clawagent.analyze",
+          "group": "1_modification",
+          "when": "editorTextFocus"
+        },
+        {
+          "command": "clawagent.improve",
+          "group": "1_modification",
+          "when": "editorTextFocus"
+        },
+        {
+          "command": "clawagent.document",
+          "group": "1_modification",
+          "when": "editorTextFocus"
+        },
+        {
+          "command": "clawagent.test",
+          "group": "1_modification",
+          "when": "editorTextFocus"
+        }
+      ]
+    },
+    "configuration": {
+      "type": "object",
+      "title": "CLAW Agent",
+      "properties": {
+        "clawagent.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Ativa/desativa o CLAW Agent"
+        },
+        "clawagent.aiProvider": {
+          "type": "string",
+          "default": "auto",
+          "enum": ["auto", "openai", "gemini", "claude", "localai", "ollama"],
+          "description": "Provedor de IA (auto = detecta automaticamente)"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/node": "^18.0.0",
+    "@types/vscode": "^1.85.0",
+    "typescript": "^5.3.0"
+  },
+  "dependencies": {
+    "axios": "^1.6.0"
+  }
+}
