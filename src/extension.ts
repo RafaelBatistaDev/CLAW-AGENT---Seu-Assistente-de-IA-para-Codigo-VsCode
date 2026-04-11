@@ -1,5 +1,5 @@
 /**
- * 🤖 CLAW AGENT v1.1.3
+ * 🤖 CLAW AGENT v1.1.3 - REFATORADO
  * Agente profissional de IA focado em:
  * - analyze: encontra bugs e melhorias
  * - improve: refatora e otimiza
@@ -17,7 +17,6 @@
 
 import * as vscode from 'vscode';
 import { AgentManager } from './agentManager';
-import { PathHelper } from './utils/pathHelper';
 import { ClawSettingsTreeProvider, ClawDataProvider } from './views/clawTreeProvider';
 
 let agentManager: AgentManager;
@@ -25,68 +24,71 @@ let isEnabled = false;
 let statusBarItem: vscode.StatusBarItem;
 let lastResultTitle: string = '';
 let lastResultContent: string = '';
-let settingsProvider: ClawSettingsTreeProvider;
-let suggestionsProvider: ClawDataProvider;
-let suggestionsBarItem: vscode.StatusBarItem;
 
 export async function activate(context: vscode.ExtensionContext) {
     console.log('🤖 Iniciando CLAW Agent...');
 
     try {
         // ════════════════════════════════════════════════════════════════════════════════
-        // 1️⃣ PRIMEIRO: Registrar o TreeDataProvider para a view
+        // 1️⃣ REGISTRAR TREE VIEW PROVIDERS
         // ════════════════════════════════════════════════════════════════════════════════
-        settingsProvider = new ClawSettingsTreeProvider();
+        const settingsProvider = new ClawSettingsTreeProvider();
         context.subscriptions.push(
             vscode.window.registerTreeDataProvider('clawagent.settings', settingsProvider)
         );
         console.log('✅ Provider de Configurações registrado');
 
-        // Registrar provider de Sugestões na activity bar
-        suggestionsProvider = new ClawDataProvider();
+        const suggestionsProvider = new ClawDataProvider();
         context.subscriptions.push(
             vscode.window.registerTreeDataProvider('clawSuggestions', suggestionsProvider)
         );
-        console.log('✅ Provider de Sugestões registrado (clawSuggestions)');
+        console.log('✅ Provider de Sugestões registrado');
 
-        // ════════════════════════════════════════════════════════════════════════
-        // StatusBar Item adicional: Abrir Sugestões
-        // ════════════════════════════════════════════════════════════════════════
-        suggestionsBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 100);
-        suggestionsBarItem.command = 'claw.openSuggestions';
-        suggestionsBarItem.tooltip = 'Abrir Sugestões do CLAW';
-        suggestionsBarItem.text = '📂 CLAW Sugestões';
-        suggestionsBarItem.show();
-        context.subscriptions.push(suggestionsBarItem);
+        // ════════════════════════════════════════════════════════════════════════════════
+        // 2️⃣ REGISTRAR COMANDOS DO TREE VIEW
+        // ════════════════════════════════════════════════════════════════════════════════
         context.subscriptions.push(
-            vscode.commands.registerCommand('claw.openSuggestions', async () => {
-                // Abre o container na Activity Bar
-                try {
-                    await vscode.commands.executeCommand('workbench.view.extension.claw-explorer');
-                } catch (err) {
-                    // fallback: apenas abrir quick pick
-                    vscode.window.showQuickPick(['Abrir Sugestões']).then(() => {});
+            vscode.commands.registerCommand('clawagent.refresh', () => {
+                settingsProvider?.refresh?.();
+            })
+        );
+
+        context.subscriptions.push(
+            vscode.commands.registerCommand('claw.refreshEntry', () => {
+                suggestionsProvider?.refresh?.();
+            })
+        );
+
+        context.subscriptions.push(
+            vscode.commands.registerCommand('claw.deleteEntry', async (item) => {
+                if (!item) {
+                    vscode.window.showWarningMessage('Selecione uma sugestão para deletar');
+                    return;
+                }
+                const pick = await vscode.window.showQuickPick(['Sim, deletar', 'Cancelar'], {
+                    placeHolder: `Deletar: ${item.label}?`
+                });
+                if (pick === 'Sim, deletar') {
+                    vscode.window.showInformationMessage(`Sugestão deletada: ${item.label}`);
+                    suggestionsProvider?.refresh?.();
                 }
             })
         );
 
         // ════════════════════════════════════════════════════════════════════════════════
-        // 2️⃣ SEGUNDO: Criar status bar item
+        // 3️⃣ CRIAR STATUS BAR ITEM
         // ════════════════════════════════════════════════════════════════════════════════
         statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
         statusBarItem.command = 'clawagent.showMenu';
         statusBarItem.tooltip = 'Clique para abrir o menu de comandos CLAW Agent';
-        isEnabled = false;  // Estado inicial: desativado
-        updateStatusBar();  // Atualizar visual com estado correto
+        isEnabled = false;
+        updateStatusBar();
         statusBarItem.show();
         context.subscriptions.push(statusBarItem);
-        console.log('✅ Status Bar Item criado e mostrado na barra de status');
-
-        const osInfo = PathHelper.getSystemInfo();
-        console.log(`🤖 CLAW Agent: Painel de Configurações Ativo em ${osInfo}...`);
+        console.log('✅ Status Bar Item criado');
 
         // ════════════════════════════════════════════════════════════════════════════════
-        // 3️⃣ TERCEIRO: Inicializar gerenciador de agentes
+        // 4️⃣ INICIALIZAR AGENT MANAGER
         // ════════════════════════════════════════════════════════════════════════════════
         try {
             agentManager = new AgentManager();
@@ -94,12 +96,13 @@ export async function activate(context: vscode.ExtensionContext) {
             console.log('✅ AgentManager inicializado');
         } catch (agentError) {
             console.warn('⚠️ Aviso: AgentManager não inicializou completamente', agentError);
-            // Continuar mesmo se o agent falhar - o provider já está registrado
         }
 
         // ════════════════════════════════════════════════════════════════════════════════
-        // COMANDO TOGGLE: ATIVAR/DESATIVAR AGENT
+        // 5️⃣ REGISTRAR COMANDOS PRINCIPAIS
         // ════════════════════════════════════════════════════════════════════════════════
+
+        // COMANDO: TOGGLE ON/OFF
         context.subscriptions.push(
             vscode.commands.registerCommand('clawagent.toggle', () => {
                 isEnabled = !isEnabled;
@@ -113,40 +116,7 @@ export async function activate(context: vscode.ExtensionContext) {
             })
         );
 
-        // ════════════════════════════════════════════════════════════════════════════════
-        // COMANDO: ATUALIZAR CONFIGURAÇÕES (REFRESH)
-        // ════════════════════════════════════════════════════════════════════════════════
-        context.subscriptions.push(
-            vscode.commands.registerCommand('clawagent.refresh', () => {
-                settingsProvider?.refresh?.();
-            })
-        );
-
-        // Refresh para Sugestões (botão na view title)
-        context.subscriptions.push(
-            vscode.commands.registerCommand('claw.refreshEntry', () => {
-                suggestionsProvider?.refresh?.();
-            })
-        );
-
-        // Deletar sugestão (context menu) - exemplo simples
-        context.subscriptions.push(
-            vscode.commands.registerCommand('claw.deleteEntry', async (item) => {
-                if (!item) {
-                    vscode.window.showWarningMessage('Selecione uma sugestão para deletar');
-                    return;
-                }
-                const pick = await vscode.window.showQuickPick(['Sim, deletar', 'Cancelar'], { placeHolder: `Deletar: ${item.label}?` });
-                if (pick === 'Sim, deletar') {
-                    vscode.window.showInformationMessage(`Sugestão deletada: ${item.label}`);
-                    suggestionsProvider?.refresh?.();
-                }
-            })
-        );
-
-        // ════════════════════════════════════════════════════════════════════════════════
         // COMANDO: MOSTRAR MENU
-        // ════════════════════════════════════════════════════════════════════════════════
         context.subscriptions.push(
             vscode.commands.registerCommand('clawagent.showMenu', async () => {
                 const items: vscode.QuickPickItem[] = [
@@ -199,7 +169,6 @@ export async function activate(context: vscode.ExtensionContext) {
 
                 if (!choice) return;
 
-                // Mapear a escolha para o comando
                 switch (choice.label.split(' ')[1]) {
                     case 'Analisar':
                         vscode.commands.executeCommand('clawagent.analyze');
@@ -230,9 +199,7 @@ export async function activate(context: vscode.ExtensionContext) {
             })
         );
 
-        // ════════════════════════════════════════════════════════════════════════════════
         // COMANDO: MOSTRAR ÚLTIMO RESULTADO
-        // ════════════════════════════════════════════════════════════════════════════════
         context.subscriptions.push(
             vscode.commands.registerCommand('clawagent.showLastResult', () => {
                 if (lastResultTitle && lastResultContent) {
@@ -241,9 +208,7 @@ export async function activate(context: vscode.ExtensionContext) {
             })
         );
 
-        // ════════════════════════════════════════════════════════════════════════════════
         // COMANDO 1: ANALISAR CÓDIGO
-        // ════════════════════════════════════════════════════════════════════════════════
         context.subscriptions.push(
             vscode.commands.registerCommand('clawagent.analyze', async () => {
                 if (!isEnabled) {
@@ -278,9 +243,7 @@ export async function activate(context: vscode.ExtensionContext) {
             })
         );
 
-        // ════════════════════════════════════════════════════════════════════════════════
         // COMANDO 2: MELHORAR CÓDIGO
-        // ════════════════════════════════════════════════════════════════════════════════
         context.subscriptions.push(
             vscode.commands.registerCommand('clawagent.improve', async () => {
                 if (!isEnabled) {
@@ -315,9 +278,7 @@ export async function activate(context: vscode.ExtensionContext) {
             })
         );
 
-        // ════════════════════════════════════════════════════════════════════════════════
         // COMANDO 3: GERAR DOCUMENTAÇÃO
-        // ════════════════════════════════════════════════════════════════════════════════
         context.subscriptions.push(
             vscode.commands.registerCommand('clawagent.document', async () => {
                 if (!isEnabled) {
@@ -352,9 +313,7 @@ export async function activate(context: vscode.ExtensionContext) {
             })
         );
 
-        // ════════════════════════════════════════════════════════════════════════════════
         // COMANDO 4: CRIAR TESTES
-        // ════════════════════════════════════════════════════════════════════════════════
         context.subscriptions.push(
             vscode.commands.registerCommand('clawagent.test', async () => {
                 if (!isEnabled) {
@@ -389,9 +348,7 @@ export async function activate(context: vscode.ExtensionContext) {
             })
         );
 
-        // ════════════════════════════════════════════════════════════════════════════════
         // COMANDO 5: FAZER PERGUNTA
-        // ════════════════════════════════════════════════════════════════════════════════
         context.subscriptions.push(
             vscode.commands.registerCommand('clawagent.ask', async () => {
                 if (!isEnabled) {
@@ -426,9 +383,7 @@ export async function activate(context: vscode.ExtensionContext) {
             })
         );
 
-        // ════════════════════════════════════════════════════════════════════════════════
         // COMANDO 6: MOSTRAR STATUS
-        // ════════════════════════════════════════════════════════════════════════════════
         context.subscriptions.push(
             vscode.commands.registerCommand('clawagent.status', async () => {
                 const status = await agentManager.getStatus();
@@ -436,18 +391,14 @@ export async function activate(context: vscode.ExtensionContext) {
             })
         );
 
-        // ════════════════════════════════════════════════════════════════════════════════
-        // COMANDO: ABRIR CONFIGURAÇÕES
-        // ════════════════════════════════════════════════════════════════════════════════
+        // COMANDO 7: ABRIR CONFIGURAÇÕES
         context.subscriptions.push(
             vscode.commands.registerCommand('clawagent.openSettings', async () => {
-                // Abre as configurações do CLAW Agent
                 await vscode.commands.executeCommand('workbench.action.openSettings', 'claw-agent');
             })
         );
 
         console.log('✅ CLAW Agent v1.1.3 ativado com sucesso!');
-        console.log('📌 View "CLAW Agent - Configurações" registrada no Explorer');
 
     } catch (error) {
         console.error('❌ Erro ao ativar CLAW Agent:', error);
@@ -475,7 +426,6 @@ function updateStatusBar() {
  * Mostra resultado em um painel webview com suporte cross-platform
  */
 function showResultPanel(title: string, content: string) {
-    // Salvar o resultado para poder reabrí-lo pelo botão de status bar
     lastResultTitle = title;
     lastResultContent = content;
 
@@ -486,7 +436,6 @@ function showResultPanel(title: string, content: string) {
         { enableScripts: true }
     );
 
-    // Detecta tema (light/dark) e ajusta CSS
     const isDark = vscode.window.activeColorTheme?.kind === vscode.ColorThemeKind.Dark;
     const bgColor = isDark ? '#1e1e1e' : '#ffffff';
     const textColor = isDark ? '#e0e0e0' : '#333333';
@@ -582,14 +531,6 @@ function showResultPanel(title: string, content: string) {
                     transform: scale(0.95);
                 }
 
-                .info-box {
-                    background-color: ${codeBg};
-                    border-left: 4px solid ${accentColor};
-                    padding: 15px;
-                    margin: 15px 0;
-                    border-radius: 4px;
-                }
-
                 strong {
                     color: ${accentColor};
                 }
@@ -625,7 +566,6 @@ function showResultPanel(title: string, content: string) {
                     });
                 }
 
-                // Renderiza conteúdo com formatação
                 const content = ${JSON.stringify(content)};
                 document.getElementById('content').innerHTML = content
                     .split('\\n')
@@ -642,6 +582,7 @@ function showResultPanel(title: string, content: string) {
         </html>
     `;
 }
+
 /**
  * Escapa caracteres especiais para HTML
  */

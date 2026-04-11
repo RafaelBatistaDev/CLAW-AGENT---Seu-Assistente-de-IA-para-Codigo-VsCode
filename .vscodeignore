@@ -1,53 +1,16 @@
-# Ferramentas de Build
-build.sh
-build.bat
-build.ps1
-compile.sh
-build-distrobox.sh
-build-podman.sh
-build-docker-compose.sh
-webpack.config.js
-tsconfig.json
-.eslintrc.json
-Dockerfile
-docker-compose.yml
-
-# Dependências do npm
+**/.git/**
+**/.vscode/**
+**/.vscode-test/**
 node_modules/**
-package-lock.json
-
-# Documentação de Build (não necessária no VSIX)
-BUILD_GUIDE.md
-COMPILAR_AGORA.md
-COMPILAR_E_PUBLICAR.md
-GERAR_VSIX_AGORA.md
-CHECKLIST_COMPILACAO.md
-RELATÓRIO_FINAL.md
-RESUMO_EXECUTIVO.md
-VERIFICACAO_FINAL.txt
-IMPROVEMENTS.md
-VERSION_1_1_3_SUMMARY.md
-CROSS_PLATFORM_GUIDE.md
-FINAL_UPDATES_v1.1.3.md
-QUICK_BUILD.md
-BUILD_CONTAINER_GUIDE.md
-TREE_VIEW_IMPLEMENTATION.md
-TREE_VIEW_TESTING_GUIDE.md
-RESUMO_MENU_TECNICO.txt
-TREEVIEW_IMPROVEMENTS.md
-CHANGELOG.md
-
-# Código Fonte TypeScript (já compilado em dist/)
-src/**
-
-# Git e Controle de Versão
-.git/**
+out/
+dist/**/*.map
+src/
 .gitignore
-.gitattributes
-
-# Desenvolvimento VS Code
-.vscode/**
-.vscodeignore
+.eslintrc.json
+tsconfig.json
+webpack.config.js
+package-lock.json
+*.vsix
 
 # Testes
 test/**
