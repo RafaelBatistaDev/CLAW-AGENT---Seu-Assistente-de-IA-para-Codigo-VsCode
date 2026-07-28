@@ -30,7 +30,6 @@ interface ProviderConfig {
 export class AgentManager {
     private aiProvider: AIProvider | null = null;
     private readonly DEFAULT_TIMEOUT = 30000;
-    private readonly DEFAULT_MAX_RETRIES = 3;
 
     constructor() {
         this.detectProviderFromEnv();
@@ -449,7 +448,6 @@ Ou IAs locais (100% grátis):
 
         const config = this.getConfig();
         const timeout = config.get<number>('requestTimeout', this.DEFAULT_TIMEOUT);
-        const maxRetries = config.get<number>('maxRetries', this.DEFAULT_MAX_RETRIES);
 
         try {
             const providerKey = this.aiProvider.providerKey;

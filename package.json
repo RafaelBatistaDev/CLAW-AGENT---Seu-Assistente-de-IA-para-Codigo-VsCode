@@ -678,7 +678,7 @@
   "scripts": {
     "vscode:prepublish": "npm run compile:prod",
     "compile": "tsc -p ./",
-    "compile:prod": "tsc -p ./ --noEmit false && webpack --config webpack.config.js",
+    "compile:prod": "tsc -p ./",
     "watch": "tsc -watch -p ./",
     "lint": "eslint src --ext .ts",
     "lint:fix": "eslint src --ext .ts --fix",
@@ -696,7 +696,8 @@
     "terser-webpack-plugin": "^5.3.0",
     "typescript": "^5.3.0",
     "vsce": "^2.15.0",
-    "webpack": "^5.89.0"
+    "webpack": "^5.89.0",
+    "webpack-cli": "^5.1.4"
   },
   "dependencies": {
     "axios": "^1.6.0"

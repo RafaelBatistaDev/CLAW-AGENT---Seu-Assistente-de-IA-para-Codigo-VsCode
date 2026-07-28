@@ -366,7 +366,8 @@ function showResultPanel(title: string, content: string) {
         .map(line => escapeHtml(line))
         .map(line => {
             if (line.startsWith('#')) {
-                const level = line.match(/^#+/)[0].length;
+                const match = line.match(/^#+/);
+                const level = match ? match[0].length : 1;
                 const text = line.replace(/^#+\s*/, '');
                 return `<h${Math.min(level + 1, 4)}>${text}</h${Math.min(level + 1, 4)}>`;
             }
