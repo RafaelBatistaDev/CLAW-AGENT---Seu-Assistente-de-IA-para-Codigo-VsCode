@@ -1,0 +1,81 @@
+# Dependências
+node_modules/
+package-lock.json
+
+# Build output
+dist/
+out/
+*.vsix
+
+# Logs
+*.log
+logs/
+.nyc_output/
+coverage/
+report/
+reports/
+.lcov
+
+# Environment
+.env
+.env.local
+.env.*.local
+.env.production.local
+
+# Editor
+.vscode/
+.vscode-test/
+*.swp
+*.swo
+*~
+*.sublime-workspace
+
+# OS
+Thumbs.db
+ehthumbs.db
+.DS_Store
+.directory
+.AppleDouble
+.LSOverride
+
+# Build Scripts (Container)
+build-distrobox.sh
+build-podman.sh
+build-docker-compose.sh
+Dockerfile
+docker-compose.yml
+
+# Arquivos temporários
+*.tmp
+*.bak
+*.backup
+*.old
+.cache/
+.temp/
+.tmp/
+
+# Cache de compilação
+.eslintcache
+.webpack/
+.build-cache/
+
+# Credenciais e secrets
+tokens/
+secrets.json
+*.pem
+*.key
+*.crt
+*.cert
+.ssh/
+
+# Testes
+.mocha-report/
+.jest-cache/
+test-results/
+.nyc_output/
+
+# Binários
+*.exe
+*.app
+*.dmg
+*.tar.gz

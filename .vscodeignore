@@ -1,0 +1,64 @@
+**/.git/**
+**/.vscode/**
+**/.vscode-test/**
+node_modules/**
+out/
+dist/**/*.map
+src/
+.gitignore
+.eslintrc.json
+tsconfig.json
+webpack.config.js
+package-lock.json
+*.vsix
+
+# Testes
+test/**
+tests/**
+*.test.ts
+*.spec.ts
+*.test.js
+*.spec.js
+
+# Documentação
+docs/**
+CONTRIBUTING.md
+CHANGELOG.md
+
+# Relatórios
+coverage/
+.nyc_output/
+.mocha-report/
+.jest-cache/
+report/
+reports/
+
+# Cache
+*.cache
+.cache/
+.temp/
+.tmp/
+
+# Backups
+*.bak
+*.backup
+*.old
+~*
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+ehthumbs.db
+.directory
+
+# Credenciais
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+*.crt
+*.cert
+secrets.json
